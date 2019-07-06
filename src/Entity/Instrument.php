@@ -33,6 +33,11 @@ class Instrument
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->createdAt = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -83,6 +83,7 @@ class Event
 
     public function __construct()
     {
+        $this->createdAt = new \Datetime();
         $this->participants = new ArrayCollection();
     }
 

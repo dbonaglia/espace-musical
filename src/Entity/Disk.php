@@ -57,6 +57,7 @@ class Disk
 
     public function __construct()
     {
+        $this->createdAt = new \Datetime();
         $this->users = new ArrayCollection();
     }
 

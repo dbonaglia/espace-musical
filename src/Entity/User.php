@@ -6,12 +6,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
+ * @UniqueEntity(fields={"email"}, message="L'email' {{ value }} est déjà utilisée, veuillez en choisir une autre.")
+ * @UniqueEntity(fields={"username"}, message="Le pseudo {{ value }} est déjà utilisé, veuillez en choisir un autre.")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -22,11 +27,13 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 3, max = 30, minMessage = "Le pseudo {{ value }} n'est pas valide. Votre pseudo doit contenir {{ limit }} caractères minimum.", maxMessage = "otre pseudo doit contenir {{ limit }} caractères maximum.")
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(message = "L'email {{ value }} n'est pas un email valide.")
      */
     private $email;
 
@@ -92,6 +99,7 @@ class User
 
     public function __construct()
     {
+        $this->createdAt = new \Datetime();
         $this->disks = new ArrayCollection();
         $this->announcements = new ArrayCollection();
         $this->messages = new ArrayCollection();
@@ -358,4 +366,11 @@ class User
 
         return $this;
     }
+
+    public function getRoles() {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt() {}
+    public function eraseCredentials() {}
 }
