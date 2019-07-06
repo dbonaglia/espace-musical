@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,13 +17,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController {
 
     /** @Route("/add") */
-    public function add(Request $request, UserPasswordEncoderInterface $encoder, SerializerInterface $serializer, ValidatorInterface $validator, ObjectManager $manager) {
+    public function add(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator, ObjectManager $manager) {
 
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
 
         // Avant toute chose, on vérifie que le mot de passe est assez long
-        if(strlen($data['password']) < 8) return new Response('Votre mot de passe doit contenir 8 caractères minimum', Response::HTTP_I_AM_A_TEAPOT);
+        if(strlen($data['password']) < 8) return new Response('Votre mot de passe doit contenir 8 caractères minimum.', Response::HTTP_I_AM_A_TEAPOT);
 
         // On insère les données Json dans une nouvelle instance de l'entité User
         $user = new User();
@@ -41,7 +42,16 @@ class UserController extends AbstractController {
         } else {
             $manager->persist($user);
             $manager->flush();
-            return new Response('L\'utilisateur à correctement été ajouté dans la base de données', Response::HTTP_CREATED);
+            return new Response('L\'utilisateur à correctement été ajouté dans la base de données.', Response::HTTP_CREATED);
+        }
+    }
+
+    /** @Route("/connect") */
+    public function connect(Request $request, SerializerInterface $serializer) {
+
+        // Si les champs renseigné sont correct, on renvoit un Json de l'utilisateur 
+        if($user = $this->getUser()) {
+            return $this->redirectToRoute('responseJson', ['json' => $serializer->serialize($user, 'json')]);
         }
     }
 }

@@ -2,15 +2,22 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
         App\Entity\User:
-            algorithm: auto
+            algorithm: bcrypt
     providers:
         in_memory: { memory: ~ }
+        in_database_users:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
+            provider: in_database_users
+            json_login:
+                check_path: /api-db/users/connect
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
