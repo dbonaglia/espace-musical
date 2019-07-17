@@ -24,7 +24,7 @@ class UserController extends AbstractController {
 
         // Avant toute chose, on vérifie que le mot de passe est assez long
         if(strlen($data['password']) < 8) return new Response('Votre mot de passe doit contenir 8 caractères minimum.', Response::HTTP_I_AM_A_TEAPOT);
-
+        
         // On insère les données Json dans une nouvelle instance de l'entité User
         $user = new User();
         $user
@@ -51,6 +51,7 @@ class UserController extends AbstractController {
 
         // Si les champs renseigné sont correct, on renvoit un Json de l'utilisateur 
         if($user = $this->getUser()) {
+            $user->setPassword(''); // Pour raison de sécurité, on évite de renvoyer le mdp au front
             return $this->redirectToRoute('responseJson', ['json' => $serializer->serialize($user, 'json')]);
         }
     }
