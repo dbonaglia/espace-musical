@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -22,11 +23,13 @@ class Event
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 5, minMessage = "Le titre {{ value }} n'est pas valide. Votre titre doit contenir {{ limit }} caractères minimum.")
      */
     private $title;
 
@@ -42,6 +45,7 @@ class Event
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min = 100, minMessage = "Votre description'est pas valide et doit contenir {{ limit }} caractères minimum.")
      */
     private $description;
 
