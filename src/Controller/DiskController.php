@@ -25,7 +25,7 @@ class DiskController extends AbstractController {
         $disk
             ->setName($data['name'])
             ->setArtist($data['artist'])
-            ->setFormat($data['format'])
+            // ->setFormat($data['format'])
             ->setType($data['type'])
         ;
 
