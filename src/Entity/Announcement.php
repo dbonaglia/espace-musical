@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnnouncementRepository")
@@ -20,11 +21,13 @@ class Announcement
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 10, minMessage = "Le titre n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min = 100, minMessage = "Le contenu n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
      */
     private $content;
 

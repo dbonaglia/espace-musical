@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InstrumentRepository")
+ * @UniqueEntity("name")
  * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
  */
 class Instrument

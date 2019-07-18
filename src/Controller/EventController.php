@@ -29,7 +29,7 @@ class EventController extends AbstractController {
         if($startDate > $endDate) return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_I_AM_A_TEAPOT);
 
         $event
-            ->setType($data['type']) // Concert ou Festival
+            ->setType($data['type'])
             ->setTitle($data['title'])
             ->setArtists($data['artists'])
             ->setLocation($data['location'])

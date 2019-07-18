@@ -18,7 +18,7 @@ class APIController extends AbstractController {
 
     public static function DateFormater(string $date) {
         $datetime = new \Datetime();
-        $explodeDate = explode('-', $date);
+        $explodeDate = explode('/', $date);
         $datetime->setDate($explodeDate[2], $explodeDate[1], $explodeDate[0]);
         $datetime->setTime($explodeDate[3], $explodeDate[4]);
         return $datetime;
