@@ -9,10 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class APIController extends AbstractController {
 
-    /** @Route("/responseJson", name="responseJson") */
-    public function responseJson(Request $request) {
-        $response = new JsonResponse();
-        $response->setContent($request->query->get('json'));
+    public static function responseJson($data, $statut) {
+        $response = new JsonResponse($data, $statut);
+        $response->setContent($data);
         return $response;
     }
 

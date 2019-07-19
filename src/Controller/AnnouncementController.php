@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Instrument;
 use App\Entity\Announcement;
+use App\Controller\APIController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -35,7 +36,7 @@ class AnnouncementController extends AbstractController {
 
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
-            return new Response($errors, Response::HTTP_I_AM_A_TEAPOT);
+            return APIController::responseJson($serializer->serialize($errors, 'json'), Response::HTTP_I_AM_A_TEAPOT);
         } else {
             $manager->persist($announcement);
             $manager->flush();

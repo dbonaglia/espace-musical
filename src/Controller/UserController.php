@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Controller\APIController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,20 +19,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController {
 
     /** @Route("/add") */
-    public function add(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator, ObjectManager $manager) {
+    public function add(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator, ObjectManager $manager, SerializerInterface $serializer) {
 
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
-
-        // Avant toute chose, on vérifie que le mot de passe est assez long
-        if(strlen($data['password']) < 8) return new Response('Votre mot de passe doit contenir 8 caractères minimum.', Response::HTTP_I_AM_A_TEAPOT);
         
         // On insère les données Json dans une nouvelle instance de l'entité User
         $user = new User();
         $user
             ->setEmail($data['email'])
             ->setUsername($data['username'])
-            ->setPassword($encoder->encodePassword($user, $data['password']))
+            ->setPassword($data['password'])
         ;
 
         // On vérifie les contraintes de validation
@@ -38,8 +37,9 @@ class UserController extends AbstractController {
 
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
-            return new Response($errors, Response::HTTP_I_AM_A_TEAPOT);
+            return APIController::responseJson($serializer->serialize($errors, 'json'), Response::HTTP_I_AM_A_TEAPOT);
         } else {
+            $user->setPassword($encoder->encodePassword($user, $data['password']));
             $manager->persist($user);
             $manager->flush();
             return new Response('L\'utilisateur à correctement été ajouté dans la base de données.', Response::HTTP_CREATED);
@@ -51,7 +51,7 @@ class UserController extends AbstractController {
 
         if($user = $this->getUser()) {
             $user->setPassword(''); // Pour raison de sécurité, on évite de renvoyer le mdp au front
-            return $this->redirectToRoute('responseJson', ['json' => $serializer->serialize($user, 'json')]);
+            return APIController::responseJson($serializer->serialize($user, 'json'), Response::HTTP_OK);
         }
     }
 

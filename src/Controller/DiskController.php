@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Disk;
+use App\Controller\APIController;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class DiskController extends AbstractController {
 
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
-            return new Response($errors, Response::HTTP_I_AM_A_TEAPOT);
+            return APIController::responseJson($serializer->serialize($errors, 'json'), Response::HTTP_I_AM_A_TEAPOT);
         } else {
             $manager->persist($disk);
             $manager->flush();
