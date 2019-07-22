@@ -19,6 +19,17 @@ class DiskRepository extends ServiceEntityRepository
         parent::__construct($registry, Disk::class);
     }
 
+    public function findOneDisk($artist, $name) {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.artist = :artist')
+            ->andWhere('d.name = :name')
+            ->setParameter('artist', $artist)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Disk[] Returns an array of Disk objects
     //  */
