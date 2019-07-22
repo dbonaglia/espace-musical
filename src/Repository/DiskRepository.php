@@ -25,6 +25,7 @@ class DiskRepository extends ServiceEntityRepository
             ->andWhere('d.name = :name')
             ->setParameter('artist', $artist)
             ->setParameter('name', $name)
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult()
         ;

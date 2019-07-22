@@ -26,7 +26,7 @@ class DiskController extends AbstractController {
         $user = $ur->find($data['userid']);
 
         // Si le disk que veut rajoute l'utilisateur n'est pas déjà présent en base de données, on l'ajoute
-        if(!$disk = $dr->findOneDisk($data['artist'], $data['name'])) {
+        if(!$dr->findOneDisk($data['artist'], $data['name'])) {
             $disk = new Disk();
             $disk
                 ->setArtist($data['artist'])
@@ -46,8 +46,9 @@ class DiskController extends AbstractController {
                 $manager->flush();
             }
         }
+
         $user
-            ->addDisk($dr->findOneDisk($data['artist'], $data['name']))
+            ->addDisk($dr->findOneDisk($data['artist'], $data['name'])[0])
             ->setUpdatedAt(new \Datetime())
         ;
         $manager->persist($user);
