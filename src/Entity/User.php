@@ -9,10 +9,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
+ * @ApiResource(normalizationContext={"groups"={"user"}}, collectionOperations={"get"}, itemOperations={"get"})
  * @UniqueEntity(fields={"email"}, message="L'email' {{ value }} est déjà utilisée, veuillez en choisir une autre.")
  * @UniqueEntity(fields={"username"}, message="Le pseudo {{ value }} est déjà utilisé, veuillez en choisir un autre.")
  */
@@ -22,18 +23,21 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"user", "message", "announcement", "event"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 3, max = 30, minMessage = "Le pseudo {{ value }} n'est pas valide. Votre pseudo doit contenir {{ limit }} caractères minimum.", maxMessage = "otre pseudo doit contenir {{ limit }} caractères maximum.")
+     * @Groups({"user", "announcement", "event"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email(message = "L'email {{ value }} n'est pas un email valide.")
+     * @Groups({"user", "announcement", "event"})
      */
     private $email;
 
@@ -45,21 +49,25 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user"})
      */
     private $zipCode;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user"})
      */
     private $address;
 
@@ -75,26 +83,31 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Disk", inversedBy="users")
+     * @Groups({"user"})
      */
     private $disks;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Announcement", mappedBy="author", orphanRemoval=true)
+     * @Groups({"user"})
      */
     private $announcements;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="author")
+     * @Groups({"user"})
      */
     private $messages;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="author")
+     * @Groups({"user"})
      */
     private $events;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="participants")
+     * @Groups({"user"})
      */
     private $participatedEvents;
 

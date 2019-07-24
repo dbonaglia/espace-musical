@@ -41,12 +41,14 @@ class AppFixtures extends Fixture {
         for ($i=0; $i < 20; $i++) {
             shuffle($formats);
             shuffle($types);
+            shuffle($user);
             $disk[$i] = new Disk();
             $disk[$i]
                 ->setName('Disk '.$i)
                 ->setArtist('Artist of Disk '.$i)
                 ->setFormat($formats[1])
                 ->setType($types[1])
+                ->addUser($user[1])
             ;
             $manager->persist($disk[$i]);
         }

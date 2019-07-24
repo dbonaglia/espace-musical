@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InstrumentRepository")
  * @UniqueEntity("name")
- * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
+ * @ApiResource(normalizationContext={"groups"={"instrument"}}, collectionOperations={"get"}, itemOperations={"get"})
  */
 class Instrument
 {
@@ -17,11 +18,13 @@ class Instrument
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"instrument"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"instrument"})
      */
     private $name;
 

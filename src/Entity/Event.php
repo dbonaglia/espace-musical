@@ -8,11 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  * @UniqueEntity("title")
- * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
+ * @ApiResource(normalizationContext={"groups"={"event"}}, collectionOperations={"get"}, itemOperations={"get"})
  */
 class Event
 {
@@ -20,49 +21,57 @@ class Event
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"event", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     * @Groups({"event"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 5, minMessage = "Le titre {{ value }} n'est pas valide. Votre titre doit contenir {{ limit }} caractères minimum.")
+     * @Groups({"event", "user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event"})
      */
     private $artists;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"event"})
      */
     private $location;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min = 100, minMessage = "Votre description'est pas valide et doit contenir {{ limit }} caractères minimum.")
+     * @Groups({"event"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"event"})
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"event"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"event"})
      */
     private $price;
 
@@ -79,11 +88,13 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"event"})
      */
     private $author;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="participatedEvents")
+     * @Groups({"event"})
      */
     private $participants;
 

@@ -5,10 +5,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnnouncementRepository")
- * @ApiResource(collectionOperations={"get"}, itemOperations={"get"})
+ * @ApiResource(normalizationContext={"groups"={"announcement"}}, collectionOperations={"get"}, itemOperations={"get"})
  */
 class Announcement
 {
@@ -16,23 +17,27 @@ class Announcement
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"announcement", "user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 10, minMessage = "Le titre n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
+     * @Groups({"announcement", "user"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min = 100, minMessage = "Le contenu n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
+     * @Groups({"announcement", "user"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"announcement"})
      */
     private $price;
 
@@ -49,6 +54,7 @@ class Announcement
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="announcements")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"announcement"})
      */
     private $author;
 
