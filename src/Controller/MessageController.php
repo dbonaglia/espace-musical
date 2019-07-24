@@ -23,6 +23,8 @@ class MessageController extends AbstractController {
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
 
+        if($ur->find($data['author']) === $ur->find($data['receiver'])) return new Response('Vous ne pouvez pas vous envoyer de message à vous même...', Response::HTTP_I_AM_A_TEAPOT);
+
         $message = new Message();
         $message
             ->setContent($data['content'])
