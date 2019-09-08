@@ -21,7 +21,6 @@ class AppFixtures extends Fixture {
         $this->encoder = $encoder;
     }
 
-
     public function load(ObjectManager $manager) {
 
         // Users
