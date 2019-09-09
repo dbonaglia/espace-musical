@@ -18,6 +18,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /** @Route("/api-db/users") */
 class UserController extends AbstractController {
     
+  /** @Route("/get") */
+  public function getAll(UserRepository $ur, SerializerInterface $serializer) {
+    $allUsersFromDB = $ur->findAll();
+    return APIController::responseJson($serializer->serialize($allUsersFromDB, 'json', ['groups' => 'user']), Response::HTTP_OK);
+  }
+  
   /** @Route("/add") */
   public function add(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator, ObjectManager $manager, SerializerInterface $serializer) {
 

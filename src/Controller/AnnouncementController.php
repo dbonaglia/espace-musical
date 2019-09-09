@@ -18,6 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /** @Route("/api-db/announcements") */
 class AnnouncementController extends AbstractController {
 
+    /** @Route("/get") */
+    public function getAll(AnnouncementRepository $ar, SerializerInterface $serializer) {
+        $allAnnouncementsFromDB = $ar->findAll();
+        return APIController::responseJson($serializer->serialize($allAnnouncementsFromDB, 'json', ['groups' => 'announcement']), Response::HTTP_OK);
+    }
+
     /** @Route("/add",) */
     public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur, SerializerInterface $serializer) {
 
