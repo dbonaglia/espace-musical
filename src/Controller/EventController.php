@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /** @Route("/api-db/events") */
 class EventController extends AbstractController {
 
-    /** @Route("/getAll") */
+    /** @Route("/get") */
     public function getAll(EventRepository $er, SerializerInterface $serializer) {
         $allEventsFromDB = $er->findAll();
         return APIController::responseJson($serializer->serialize($allEventsFromDB, 'json', ['groups' => 'event']), Response::HTTP_OK);
