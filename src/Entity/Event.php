@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  * @UniqueEntity("title")
- * @ApiResource(normalizationContext={"groups"={"event"}}, collectionOperations={"get"}, itemOperations={"get"})
+ * @ApiResource(normalizationContext={"groups"={"event"}}, denormalizationContext={"groups"={"event"}}, collectionOperations={"get"}, itemOperations={"get"})
  */
 class Event
 {

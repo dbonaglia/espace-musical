@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -18,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AnnouncementController extends AbstractController {
 
     /** @Route("/add",) */
-    public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur) {
+    public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur, SerializerInterface $serializer) {
 
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
@@ -47,7 +48,7 @@ class AnnouncementController extends AbstractController {
     }
 
     /** @Route("/edit",) */
-    public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, AnnouncementRepository $ar) {
+    public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, AnnouncementRepository $ar, SerializerInterface $serializer) {
 
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
@@ -69,7 +70,7 @@ class AnnouncementController extends AbstractController {
                 
                 // On envoie la réponse après vérification des erreurs possible
                 if (count($errors) > 0) {
-                    return new Response($errors, Response::HTTP_PRECONDITION_FAILED);
+                    return new Response($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
                 } elseif ($modifs) {
                     $announcement->setUpdatedAt(new \Datetime());
                     $manager->persist($announcement);

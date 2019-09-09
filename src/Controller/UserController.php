@@ -55,7 +55,7 @@ class UserController extends AbstractController {
   }
 
   /** @Route("/edit") */
-  public function edit(Request $request, UserRepository $ur, UserPasswordEncoderInterface $encoder, ObjectManager $manager, ValidatorInterface $validator) {
+  public function edit(Request $request, UserRepository $ur, UserPasswordEncoderInterface $encoder, ObjectManager $manager, ValidatorInterface $validator, SerializerInterface $serializer) {
 
     // On récupère les données Json sous forme de tableau PHP
     $data = json_decode($request->getContent(), true);
@@ -103,7 +103,7 @@ class UserController extends AbstractController {
 
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
-          return new Response($errors, Response::HTTP_PRECONDITION_FAILED);
+          return new Response($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
         } elseif ($modifs) {
           if($passwordModif) $user->setPassword($encoder->encodePassword($user, $data['passwordNew']));
           $user->setUpdatedAt(new \Datetime());

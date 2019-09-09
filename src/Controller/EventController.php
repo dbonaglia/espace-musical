@@ -10,14 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /** @Route("/api-db/events") */
 class EventController extends AbstractController {
 
+    /** @Route("/get") */
+    public function getAll(EventRepository $er, SerializerInterface $serializer) {
+        $allEventsFromDB = $er->findAll();
+        return APIController::responseJson($serializer->serialize($allEventsFromDB, 'json', ['groups' => 'event']), Response::HTTP_OK);
+    }
+
     /** @Route("/add") */
-    public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur) {
+    public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur, SerializerInterface $serializer) {
         
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
@@ -56,7 +63,7 @@ class EventController extends AbstractController {
     }
 
     /** @Route("/edit") */
-    public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, EventRepository $er) {
+    public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, EventRepository $er, SerializerInterface $serializer) {
         
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
@@ -109,7 +116,7 @@ class EventController extends AbstractController {
                 
                 // On envoie la réponse après vérification des erreurs possible
                 if (count($errors) > 0) {
-                    return new Response($errors, Response::HTTP_PRECONDITION_FAILED);
+                    return new Response($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
                 } elseif ($modifs) {
                     $event->setUpdatedAt(new \Datetime());
                     $manager->persist($event);
