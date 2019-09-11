@@ -58,7 +58,7 @@ class EventController extends AbstractController {
         } else {
             $manager->persist($event);
             $manager->flush();
-            return new Response('L\'évènement à correctement été ajouté dans la base de données.', Response::HTTP_CREATED);
+            return APIController::responseJson($serializer->serialize($event, 'json', ['groups' => 'event']), Response::HTTP_CREATED);
         }
     }
 
