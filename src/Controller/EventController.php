@@ -35,7 +35,7 @@ class EventController extends AbstractController {
         $startDate = APIController::DateFormater($data['startDate']);
         $endDate = APIController::DateFormater($data['endDate']);
 
-        if($startDate > $endDate) return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_PRECONDITION_FAILED);
+        // if($startDate > $endDate) return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_PRECONDITION_FAILED);
         
         $event
             ->setType($data['type'])

@@ -60,12 +60,14 @@ class Event
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Assert\LessThan(propertyPath="endDate")
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
+     * @Assert\GreaterThan(propertyPath="startDate")
      */
     private $endDate;
 
