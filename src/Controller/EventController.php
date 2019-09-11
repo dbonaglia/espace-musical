@@ -86,12 +86,8 @@ class EventController extends AbstractController {
                 if(array_key_exists('startDate', $data)) {
                     if($data['startDate'] != $event->getStartDate()) {
                         $startDate = APIController::DateFormater($data['startDate']);
-                        if($startDate > $event->getEndDate()) {
-                            return new Response('Votre date de début d\'évènement ne peut être antérieure à votre date de fin.', Response::HTTP_PRECONDITION_FAILED);
-                        } else {
-                            $event->setStartDate($startDate);
-                            $modifs = true;
-                        }
+                        $event->setStartDate($startDate);
+                        $modifs = true;
                     } else {
                         return new Response('La date de début de l\'évènement est identique à l\'ancienne.', Response::HTTP_OK);
                     }
@@ -100,12 +96,8 @@ class EventController extends AbstractController {
                 if(array_key_exists('endDate', $data)) {
                     if($data['endDate'] != $event->getEndDate()) {
                         $endDate = APIController::DateFormater($data['endDate']);
-                        if($endDate < $event->getStartDate()) {
-                            return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_PRECONDITION_FAILED);
-                        } else {
-                            $event->setEndDate($endDate);
-                            $modifs = true;
-                        }
+                        $event->setEndDate($endDate);
+                        $modifs = true;
                     } else {
                         return new Response('La date de fin de l\'évènement est identique à l\'ancienne.', Response::HTTP_OK);
                     }
