@@ -60,14 +60,14 @@ class Event
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
-     * @Assert\LessThan(propertyPath="endDate")
+     * @Assert\LessThan(propertyPath="endDate", message="La date de début doit être antérieure à la date de fin")
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
-     * @Assert\GreaterThan(propertyPath="startDate")
+     * @Assert\GreaterThan(propertyPath="startDate", message="La date de fin doit être après à la date de début")
      */
     private $endDate;
 
