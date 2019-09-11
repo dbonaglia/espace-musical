@@ -49,7 +49,8 @@ class AnnouncementController extends AbstractController {
         } else {
             $manager->persist($announcement);
             $manager->flush();
-            return new Response('L\'annonce à correctement été ajouté dans la base de données.', Response::HTTP_CREATED);
+            // return new Response('L\'annonce à correctement été ajouté dans la base de données.', Response::HTTP_CREATED);
+            return APIController::responseJson($serializer->serialize($announcement, 'json', ['groups' => 'announcement']), Response::HTTP_CREATED);
         }
     }
 
