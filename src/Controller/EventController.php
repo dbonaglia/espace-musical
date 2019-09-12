@@ -76,16 +76,16 @@ class EventController extends AbstractController {
             if($data['connectedUserId'] == $event->getAuthor()->getId()) {
                 $modifs = false;
 
-                $modifs = (APIController::insertInDB('type', $data, $event, 'Le type de l\'évènement est identique à l\'ancien.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('title', $data, $event, 'Le titre de l\'évènement est identique à l\'ancien.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('artistes', $data, $event, 'Les artistes de l\'évènement sont identiques aux précédents.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('location', $data, $event, 'Le lieu de l\'évènement est identique à l\'ancien.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('description', $data, $event, 'La description de l\'évènement est identique à l\'ancienne.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('price', $data, $event, 'Le prix de l\'évènement est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('type', $data, $event, 'Le type de l\'évènement est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('title', $data, $event, 'Le titre de l\'évènement est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('artistes', $data, $event, 'Les artistes de l\'évènement sont identiques aux précédents.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('location', $data, $event, 'Le lieu de l\'évènement est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('description', $data, $event, 'La description de l\'évènement est identique à l\'ancienne.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('price', $data, $event, 'Le prix de l\'évènement est identique à l\'ancien.') === true) ? true : false;
                 
                 if(array_key_exists('startDate', $data)) {
-                    if($data['startDate'] != $event->getStartDate()) {
-                        $startDate = APIController::DateFormater($data['startDate']);
+                    $startDate = APIController::DateFormater($data['startDate']);
+                    if($startDate != $event->getStartDate()) {
                         $event->setStartDate($startDate);
                         $modifs = true;
                     } else {
@@ -94,8 +94,8 @@ class EventController extends AbstractController {
                 }
                 
                 if(array_key_exists('endDate', $data)) {
-                    if($data['endDate'] != $event->getEndDate()) {
-                        $endDate = APIController::DateFormater($data['endDate']);
+                    $endDate = APIController::DateFormater($data['endDate']);
+                    if($endDate != $event->getEndDate()) {
                         $event->setEndDate($endDate);
                         $modifs = true;
                     } else {

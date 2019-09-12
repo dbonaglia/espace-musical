@@ -68,9 +68,9 @@ class AnnouncementController extends AbstractController {
             if($data['connectedUserId'] == $announcement->getAuthor()->getId()) {
                 $modifs = false;
 
-                $modifs = (APIController::insertInDB('title', $data, $announcement, 'Le titre de l\'annonce est identique à l\'ancien.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('content', $data, $announcement, 'Le contenu de l\'annonce est identique à l\'ancien.') === true) ? true : false;
-                $modifs = (APIController::insertInDB('price', $data, $announcement, 'Le prix de l\'annonce est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('title', $data, $announcement, 'Le titre de l\'annonce est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('content', $data, $announcement, 'Le contenu de l\'annonce est identique à l\'ancien.') === true) ? true : false;
+                $modifs .= (APIController::insertInDB('price', $data, $announcement, 'Le prix de l\'annonce est identique à l\'ancien.') === true) ? true : false;
 
                 // On vérifie les contraintes de validation
                 $errors = $validator->validate($announcement);

@@ -74,11 +74,11 @@ class UserController extends AbstractController {
         $modifs = false;
         $passwordModif = false;
 
-        $modifs = (APIController::insertInDB('username', $data, $user, 'Votre pseudo est identique à l\'ancien.') === true) ? true : false;
-        $modifs = (APIController::insertInDB('firstname', $data, $user, 'Votre prénom est identique à l\'ancien.') === true) ? true : false;
-        $modifs = (APIController::insertInDB('lastname', $data, $user, 'Votre nom est identique à l\'ancien.') === true) ? true : false;
-        $modifs = (APIController::insertInDB('zipCode', $data, $user, 'Votre code postal est identique à l\'ancien.') === true) ? true : false;
-        $modifs = (APIController::insertInDB('address', $data, $user, 'Votre adresse est identique à l\'ancienne.') === true) ? true : false;
+        $modifs .= (APIController::insertInDB('username', $data, $user, 'Votre pseudo est identique à l\'ancien.') === true) ? true : false;
+        $modifs .= (APIController::insertInDB('firstname', $data, $user, 'Votre prénom est identique à l\'ancien.') === true) ? true : false;
+        $modifs .= (APIController::insertInDB('lastname', $data, $user, 'Votre nom est identique à l\'ancien.') === true) ? true : false;
+        $modifs .= (APIController::insertInDB('zipCode', $data, $user, 'Votre code postal est identique à l\'ancien.') === true) ? true : false;
+        $modifs .= (APIController::insertInDB('address', $data, $user, 'Votre adresse est identique à l\'ancienne.') === true) ? true : false;
         
         // S'il souhaite modifier son mot de passe
         if(array_key_exists('passwordNew', $data) || array_key_exists('passwordNewConfirm', $data)) {
