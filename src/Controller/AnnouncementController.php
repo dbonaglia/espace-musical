@@ -26,10 +26,8 @@ class AnnouncementController extends AbstractController {
 
     /** @Route("/add",) */
     public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur, SerializerInterface $serializer) {
-
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
-
         // On insère les données Json dans une nouvelle instance de l'entité Announcement
         $announcement = new Announcement();
         $announcement
@@ -37,12 +35,9 @@ class AnnouncementController extends AbstractController {
             ->setContent($data['content'])
             ->setAuthor($ur->find($data['author']))
         ;
-
         if(array_key_exists('price', $data)) $announcement->setPrice($data['price']);
-
         // On vérifie les contraintes de validation
         $errors = $validator->validate($announcement);
-
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
             return APIController::responseJson($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
@@ -56,25 +51,19 @@ class AnnouncementController extends AbstractController {
 
     /** @Route("/edit",) */
     public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, AnnouncementRepository $ar, SerializerInterface $serializer) {
-
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
-
         $announcement = $ar->find($data['announcementId']);
-
         // On vérifie que l'annonce a bien été trouvée en base de données
         if($announcement) {
             // On vérifie que l'utilisateur connecté est bien celui qui a publié l'annonce
             if($data['connectedUserId'] == $announcement->getAuthor()->getId()) {
                 $modifs = false;
-
                 $modifs .= (APIController::insertInDB('title', $data, $announcement, 'Le titre de l\'annonce est identique à l\'ancien.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('content', $data, $announcement, 'Le contenu de l\'annonce est identique à l\'ancien.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('price', $data, $announcement, 'Le prix de l\'annonce est identique à l\'ancien.') === true) ? true : false;
-
                 // On vérifie les contraintes de validation
                 $errors = $validator->validate($announcement);
-                
                 // On envoie la réponse après vérification des erreurs possible
                 if (count($errors) > 0) {
                     return new Response($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);

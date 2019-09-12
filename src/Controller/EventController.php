@@ -25,18 +25,12 @@ class EventController extends AbstractController {
 
     /** @Route("/add") */
     public function add(Request $request, ValidatorInterface $validator, ObjectManager $manager, UserRepository $ur, SerializerInterface $serializer) {
-        
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
-
         $event = new Event();
-
         // Formatage des dates
         $startDate = APIController::DateFormater($data['startDate']);
         $endDate = APIController::DateFormater($data['endDate']);
-
-        // if($startDate > $endDate) return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_PRECONDITION_FAILED);
-        
         $event
             ->setType($data['type'])
             ->setTitle($data['title'])
@@ -48,10 +42,8 @@ class EventController extends AbstractController {
             ->setPrice($data['price'])
             ->setAuthor($ur->find($data['author']))
         ;
-
         // On vérifie les contraintes de validation
         $errors = $validator->validate($event);
-
         // On envoie la réponse après vérification des erreurs possible
         if(count($errors) > 0) {
             return APIController::responseJson($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
@@ -64,25 +56,20 @@ class EventController extends AbstractController {
 
     /** @Route("/edit") */
     public function edit(Request $request, ValidatorInterface $validator, ObjectManager $manager, EventRepository $er, SerializerInterface $serializer) {
-        
         // On récupère les données Json sous forme de tableau PHP
         $data = json_decode($request->getContent(), true);
-        
         $event = $er->find($data['eventId']);
-        
         // On vérifie que l'évènement existe bel et bien en base de données
         if ($event) {
             // On vérifie que l'utilisateur connecté est bien celui qui a publié l'évènement
             if($data['connectedUserId'] == $event->getAuthor()->getId()) {
                 $modifs = false;
-
                 $modifs .= (APIController::insertInDB('type', $data, $event, 'Le type de l\'évènement est identique à l\'ancien.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('title', $data, $event, 'Le titre de l\'évènement est identique à l\'ancien.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('artistes', $data, $event, 'Les artistes de l\'évènement sont identiques aux précédents.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('location', $data, $event, 'Le lieu de l\'évènement est identique à l\'ancien.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('description', $data, $event, 'La description de l\'évènement est identique à l\'ancienne.') === true) ? true : false;
                 $modifs .= (APIController::insertInDB('price', $data, $event, 'Le prix de l\'évènement est identique à l\'ancien.') === true) ? true : false;
-                
                 if(array_key_exists('startDate', $data)) {
                     $startDate = APIController::DateFormater($data['startDate']);
                     if($startDate != $event->getStartDate()) {
@@ -92,7 +79,6 @@ class EventController extends AbstractController {
                         return new Response('La date de début de l\'évènement est identique à l\'ancienne.', Response::HTTP_OK);
                     }
                 }
-                
                 if(array_key_exists('endDate', $data)) {
                     $endDate = APIController::DateFormater($data['endDate']);
                     if($endDate != $event->getEndDate()) {
@@ -102,10 +88,8 @@ class EventController extends AbstractController {
                         return new Response('La date de fin de l\'évènement est identique à l\'ancienne.', Response::HTTP_OK);
                     }
                 }
-                
                 // On vérifie les contraintes de validation
                 $errors = $validator->validate($event);
-                
                 // On envoie la réponse après vérification des erreurs possible
                 if (count($errors) > 0) {
                     return new Response($serializer->serialize($errors, 'json'), Response::HTTP_PRECONDITION_FAILED);
