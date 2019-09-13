@@ -16,6 +16,7 @@ class APIController extends AbstractController {
         return $response;
     }
 
+    // ? A refaire en gérant un timestamp
     public static function DateFormater(string $date) {
         $datetime = new \Datetime();
         $explodeDate = explode('/', $date);
@@ -24,6 +25,7 @@ class APIController extends AbstractController {
         return $datetime;
     }
 
+    // ? Essayer de prendre en compte la gestion des dates, modification d'email et/ou mot de passe
     public static function insertInDB(string $key, array $data, object $class, string $sentence) {
         // On définit les Getters et Setters de manière dynamique en fonction de la clé passée en paramètre
         $setter = 'set'.ucfirst($key);
