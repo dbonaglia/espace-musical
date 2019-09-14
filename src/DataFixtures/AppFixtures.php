@@ -63,8 +63,25 @@ class AppFixtures extends Fixture {
         }
 
         // Events
-        $artists = ['Lady Gaga', 'Bob Marley', 'Paramore', 'Nickelback', 'Justin Bieber', 'Jul', 'Maître Chips'];
-        for ($i=0; $i < 10; $i++) {
+        $artists = [
+            'Lady Gaga',
+            'Paramore',
+            'Adèle',
+            'Indochine',
+            'Queen',
+            'Eminem',
+            'AC/DC',
+            'Nickelback',
+            'Metallica',
+            'Kyo',
+            'Kylie Minogue',
+            'Snoop Dogg',
+            'Hans Zimmer',
+            'Gojira',
+            'Alestorm',
+            'Halestorm'
+        ];
+        for ($i=0; $i < 20; $i++) {
             shuffle($artists);
             shuffle($user);
             $event[$i] = new Event();
@@ -73,9 +90,9 @@ class AppFixtures extends Fixture {
             if($startDate > $endDate) return new Response('Votre date de fin d\'évènement ne peut être antérieure à votre date de début.', Response::HTTP_I_AM_A_TEAPOT);
             $event[$i]
                 ->setType('Concert')
-                ->setTitle('Concert de '.$artists[1].' et '.$artists[2])
+                ->setTitle('Concert de '.$artists[1])
                 ->setArtists($artists[1].', '.$artists[2])
-                ->setLocation('75000 Paris 24 rue de l\'impasse qui pue')
+                ->setLocation('75000 Paris L\'Olympia')
                 ->setDescription('Ceci est une description')
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
