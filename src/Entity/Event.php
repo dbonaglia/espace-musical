@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
- * @UniqueEntity("title")
+ * @UniqueEntity(fields={"title"}, message="Le titre {{ value }} est déjà utilisé, veuillez en choisir un autre.")
  * @ApiResource(normalizationContext={"groups"={"event"}}, denormalizationContext={"groups"={"event"}}, collectionOperations={"get"}, itemOperations={"get"})
  */
 class Event
@@ -35,18 +35,21 @@ class Event
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 5, minMessage = "Le titre {{ value }} n'est pas valide. Votre titre doit contenir {{ limit }} caractères minimum.")
      * @Groups({"event", "user"})
+     * @Assert\NotBlank(message= "Vous devez renseigner un titre d'évènement.")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
+     * @Assert\NotBlank(message= "Vous devez renseigner au moins un artiste.")
      */
     private $artists;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"event"})
+     * @Assert\NotBlank(message= "Vous devez renseigner un lieu.")
      */
     private $location;
 
@@ -54,6 +57,7 @@ class Event
      * @ORM\Column(type="text")
      * @Assert\Length(min = 100, minMessage = "Votre description'est pas valide et doit contenir {{ limit }} caractères minimum.")
      * @Groups({"event"})
+     * @Assert\NotBlank(message= "Vous devez renseigner au moins une description.")
      */
     private $description;
 
@@ -61,6 +65,7 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
      * @Assert\LessThan(propertyPath="endDate", message="La date de début doit être antérieure à la date de fin")
+     * @Assert\NotBlank(message= "Vous devez renseigner au moins une date de début.")
      */
     private $startDate;
 
@@ -68,6 +73,7 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"event"})
      * @Assert\GreaterThan(propertyPath="startDate", message="La date de fin doit être après à la date de début")
+     * @Assert\NotBlank(message= "Vous devez renseigner au moins une date de fin.")
      */
     private $endDate;
 

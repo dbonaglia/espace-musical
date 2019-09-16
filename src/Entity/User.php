@@ -31,6 +31,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 3, max = 30, minMessage = "Le pseudo {{ value }} n'est pas valide. Votre pseudo doit contenir {{ limit }} caractères minimum.", maxMessage = "otre pseudo doit contenir {{ limit }} caractères maximum.")
      * @Groups({"user", "announcement", "event"})
+     * @Assert\NotBlank(message= "Vous devez renseigner un pseudo.")
      */
     private $username;
 
@@ -38,12 +39,14 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\Email(message = "L'email {{ value }} n'est pas un email valide.")
      * @Groups({"user", "announcement", "event"})
+     * @Assert\NotBlank(message= "Vous devez renseigner un email.")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 8, minMessage = "Le mot de passe n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
+     * @Assert\NotBlank(message= "Vous devez renseigner un mot de passe.")
      */
     private $password;
 

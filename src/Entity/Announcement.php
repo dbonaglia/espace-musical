@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnnouncementRepository")
@@ -25,6 +26,7 @@ class Announcement
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 10, minMessage = "Le titre n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
      * @Groups({"announcement", "user"})
+     * @Assert\NotBlank(message= "Vous devez renseigner un titre d'annonce.")
      */
     private $title;
 
@@ -32,6 +34,7 @@ class Announcement
      * @ORM\Column(type="text")
      * @Assert\Length(min = 100, minMessage = "Le contenu n'est pas valide, il doit contenir {{ limit }} caractères minimum.")
      * @Groups({"announcement", "user"})
+     * @Assert\NotBlank(message= "Vous devez renseigner une description.")
      */
     private $content;
 
