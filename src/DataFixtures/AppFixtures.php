@@ -55,11 +55,11 @@ class AppFixtures extends Fixture {
         // Instruments
         $instruments = ['Guitare', 'Piano', 'Batterie', 'Basse', 'Chant', 'Trompette', 'Triangle', 'Contrebasse', 'Saxophone', 'Violon', 'Clavier', 'Harmonica', 'Flûte'];
         for ($i=0; $i < count($instruments); $i++) {
-            $instrument[$i] = new Instrument();
-            $instrument[$i]
+            $instruments[$i] = new Instrument();
+            $instruments[$i]
                 ->setName($instruments[$i])
             ;
-            $manager->persist($instrument[$i]);
+            $manager->persist($instruments[$i]);
         }
 
         // Events
