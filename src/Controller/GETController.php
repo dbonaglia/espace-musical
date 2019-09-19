@@ -28,7 +28,7 @@ class GETController extends AbstractController {
     // * Récupération d'un évènement en particulier via son id
     /** @Route("/events/{id}") */
     public function getEvent($id, EventRepository $er, SerializerInterface $serializer) {
-        if ($event->find($id)) {
+        if ($er->find($id)) {
             return APIController::responseJson($serializer->serialize($event, 'json', ['groups' => 'event']), Response::HTTP_FOUND);
         } else {
             return new Response('Aucun évènement possédant cet id n\'a été trouvé.', Response::HTTP_NOT_FOUND, ['content-type' => 'text/html']);
