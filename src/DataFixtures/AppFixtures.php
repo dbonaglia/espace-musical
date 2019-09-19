@@ -108,7 +108,7 @@ class AppFixtures extends Fixture {
             shuffle($user);
             $announcement[$i] = new Announcement();
             $announcement[$i]
-                ->setTitle('Je vends un(e) : '.$instrument[1]->getName())
+                ->setTitle('Je vends un(e) : '.$instruments[1]->getName())
                 ->setContent('Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. ')
                 ->setAuthor($user[1])
             ;
