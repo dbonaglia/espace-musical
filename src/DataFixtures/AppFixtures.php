@@ -55,11 +55,11 @@ class AppFixtures extends Fixture {
         // Instruments
         $instruments = ['Guitare', 'Piano', 'Batterie', 'Basse', 'Chant', 'Trompette', 'Triangle', 'Contrebasse', 'Saxophone', 'Violon', 'Clavier', 'Harmonica', 'Flûte'];
         for ($i=0; $i < count($instruments); $i++) {
-            $instruments[$i] = new Instrument();
-            $instruments[$i]
+            $instrument[$i] = new Instrument();
+            $instrument[$i]
                 ->setName($instruments[$i])
             ;
-            $manager->persist($instruments[$i]);
+            $manager->persist($instrument[$i]);
         }
 
         // Events
@@ -108,7 +108,7 @@ class AppFixtures extends Fixture {
             shuffle($user);
             $announcement[$i] = new Announcement();
             $announcement[$i]
-                ->setTitle('Je vends un(e) : '.$instruments[1]->getName())
+                ->setTitle('Je vends un(e) : '.$instruments[$i]->getName())
                 ->setContent('Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. Super état, jamais servi. ')
                 ->setAuthor($user[1])
             ;
